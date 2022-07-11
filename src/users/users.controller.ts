@@ -1,23 +1,13 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  Inject,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Patch, Post, Query } from '@nestjs/common';
 import { IUserPersistence, UsersPersistence } from './users.persistence';
 import { CreateUserRequestModel } from './models/requests/create-user-request.model';
-import { Pagination, SuccessResponse } from '../common/types/response';
+import { Pagination } from '../common/types/response';
 import { FindUserByIdRequestModel } from './models/requests/find-user-by-id-request.model';
 import { UpdateUserRequestModel } from './models/requests/update-user-request.model';
 import { FindUsersRequestModel } from './models/requests/find-users-request.model';
 import { UsersListResponseModel } from './models/response/users-list-response.model';
 import { ApiResponse } from '@nestjs/swagger';
+import { UserResponseModel } from './models/response/user-response.model';
 
 @Controller('/users')
 export class UsersController {
@@ -26,9 +16,7 @@ export class UsersController {
 
   @Get('/')
   @ApiResponse({ type: UsersListResponseModel })
-  async getUsersList(
-    @Query() query: FindUsersRequestModel,
-  ): Promise<UsersListResponseModel> {
+  async getUsersList(@Query() query: FindUsersRequestModel) {
     const findOptions = Pagination.calculateOffset(query);
     const results = await this.usersPersistence.find(findOptions);
     const pagination = Pagination.ofTotalResults({
@@ -40,30 +28,30 @@ export class UsersController {
   }
 
   @Get('/:id')
+  @ApiResponse({ type: UserResponseModel })
   async getUserById(@Param() params: FindUserByIdRequestModel) {
     const user = await this.usersPersistence.findById(params.id);
 
-    return new SuccessResponse(user);
+    return new UserResponseModel(user);
   }
 
   @Post('/')
   @HttpCode(201)
+  @ApiResponse({ type: UserResponseModel })
   async createUser(@Body() model: CreateUserRequestModel) {
     const user = await this.usersPersistence.save(model);
 
-    return new SuccessResponse(user);
+    return new UserResponseModel(user);
   }
 
   @Patch('/:id')
-  async updateUser(
-    @Param() params: FindUserByIdRequestModel,
-    @Body() model: UpdateUserRequestModel,
-  ) {
+  @ApiResponse({ type: UserResponseModel })
+  async updateUser(@Param() params: FindUserByIdRequestModel, @Body() model: UpdateUserRequestModel) {
     const user = await this.usersPersistence.findById(params.id);
     const updatedUser = { ...model, ...user };
     const results = await this.usersPersistence.save(updatedUser);
 
-    return new SuccessResponse(results);
+    return new UserResponseModel(results);
   }
 
   @Delete('/:id')
