@@ -9,9 +9,12 @@ cache:
 ## Environments
 .node_env: &node_env
   image: node:14.18
+  before_script:
+    - npm ci
   tags:
     - linux
     - docker
+  
 
 ## Jobs
 code-check:
