@@ -1,6 +1,7 @@
 import {
   IsDateString,
   IsEmail,
+  IsMobilePhone,
   IsOptional,
   IsString,
   IsUrl,
@@ -25,6 +26,16 @@ export class CreateUserRequestModel {
   @MaxLength(255)
   @ApiProperty({ minLength: 8, maxLength: 255 })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  @IsMobilePhone('any', { strictMode: true })
+  @ApiProperty({
+    format: 'phone-number',
+    description: 'Supported formats: https://github.com/validatorjs/validator.js/blob/master/src/lib/isMobilePhone.js',
+    required: false,
+  })
+  phoneNumber?: string;
 
   @IsString()
   @MaxLength(80)

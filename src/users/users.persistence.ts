@@ -5,6 +5,7 @@ export type UserPersistenceModel = {
   username: string;
   password: string;
   email: string;
+  phoneNumber?: string;
   firstName?: string;
   lastName?: string;
   biography?: string;
@@ -14,10 +15,7 @@ export type UserPersistenceModel = {
   updatedAt: Date;
 };
 
-export type UserPersistenceSaveModel = Omit<
-  UserPersistenceModel,
-  'id' | 'createdAt' | 'updatedAt'
->;
+export type UserPersistenceSaveModel = Omit<UserPersistenceModel, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface UsersPersistence {
   save(model: UserPersistenceModel): Promise<UserPersistenceModel>;

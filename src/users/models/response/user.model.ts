@@ -10,19 +10,22 @@ export class UserModel {
   @ApiProperty({ format: 'email' })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '+48 581 432 22 23$', required: false })
+  phoneNumber?: string;
+
+  @ApiProperty({ required: false })
   firstName?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   lastName?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   biography?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   website?: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   birthday?: string;
 
   @ApiProperty({ format: 'datetime' })

@@ -1,11 +1,4 @@
-import {
-  IsDateString,
-  IsOptional,
-  IsString,
-  IsUrl,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsDateString, IsMobilePhone, IsOptional, IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserRequestModel {
@@ -14,6 +7,16 @@ export class UpdateUserRequestModel {
   @MaxLength(255)
   @ApiProperty({ minLength: 8, maxLength: 255, required: false })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  @IsMobilePhone('any', { strictMode: true })
+  @ApiProperty({
+    format: 'phone-number',
+    description: 'Supported formats: https://github.com/validatorjs/validator.js/blob/master/src/lib/isMobilePhone.js',
+    required: false,
+  })
+  phoneNumber?: string;
 
   @IsString()
   @MaxLength(80)
