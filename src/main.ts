@@ -6,11 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder()
-    .setTitle(name)
-    .setDescription(description)
-    .setVersion(version)
-    .build();
+  const config = new DocumentBuilder().setTitle(name).setDescription(description).setVersion(version).build();
 
   SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, config));
 
@@ -23,7 +19,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT || 80);
+  await app.listen(process.env.PORT || 8000);
 }
 
 bootstrap();
