@@ -5,7 +5,7 @@ import { description, name, version } from 'package.json';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const config = new DocumentBuilder().setTitle(name).setDescription(description).setVersion(version).build();
 
   SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, config));
