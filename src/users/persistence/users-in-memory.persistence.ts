@@ -1,8 +1,4 @@
-import {
-  UserPersistenceModel,
-  UserPersistenceSaveModel,
-  UsersPersistence,
-} from '../users.persistence';
+import { UserPersistenceModel, UserPersistenceSaveModel, UsersPersistence } from '../users.persistence';
 import { UUID } from '../../common/types/uuid';
 import { UserAlreadyExistsError } from '../errors/user-already-exists.error';
 import { FindOptions, FindResults } from '../../common/types/persistence';
@@ -17,20 +13,13 @@ export class UsersInMemoryPersistence implements UsersPersistence {
 
   constructor(models?: UserPersistenceModel[]) {
     models?.forEach((model) =>
-      this.users.set(
-        model.id.toLowerCase(),
-        UsersInMemoryPersistence.normalizeUserModel(model),
-      ),
+      this.users.set(model.id.toLowerCase(), UsersInMemoryPersistence.normalizeUserModel(model)),
     );
   }
 
-  async find(
-    options?: FindOptions,
-  ): Promise<FindResults<UserPersistenceModel[]>> {
+  async find(options?: FindOptions): Promise<FindResults<UserPersistenceModel[]>> {
     const offset = options?.offset || 0;
-    const limit = options?.limit
-      ? offset + options?.limit || 0
-      : this.users.size;
+    const limit = options?.limit ? offset + options?.limit || 0 : this.users.size;
 
     return {
       total: this.users.size,
@@ -47,8 +36,7 @@ export class UsersInMemoryPersistence implements UsersPersistence {
   }
 
   async save(model: SaveModel): Promise<UserPersistenceModel> {
-    const alreadyExists =
-      'id' in model && 'createdAt' in model && 'updatedAt' in model;
+    const alreadyExists = 'id' in model && 'createdAt' in model && 'updatedAt' in model;
     const user = alreadyExists
       ? UsersInMemoryPersistence.normalizeUserModel(model)
       : UsersInMemoryPersistence.createUserModel(model);
@@ -74,9 +62,7 @@ export class UsersInMemoryPersistence implements UsersPersistence {
     this.emails.delete(user.email);
   }
 
-  private static createUserModel(
-    model: UserPersistenceSaveModel,
-  ): UserPersistenceModel {
+  private static createUserModel(model: UserPersistenceSaveModel): UserPersistenceModel {
     return UsersInMemoryPersistence.normalizeUserModel({
       ...model,
       id: new UUID().toString(),
@@ -85,9 +71,7 @@ export class UsersInMemoryPersistence implements UsersPersistence {
     });
   }
 
-  private static normalizeUserModel(
-    model: UserPersistenceModel,
-  ): UserPersistenceModel {
+  private static normalizeUserModel(model: UserPersistenceModel): UserPersistenceModel {
     return {
       ...model,
       id: model.id.toLowerCase(),

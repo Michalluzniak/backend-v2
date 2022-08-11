@@ -41,6 +41,14 @@ $ docker push $DOCKER_REGISTRY_HOST/zaven-bootcamp-users-api:$APP_VERSION
 ```
 
 
+## Seeds
+
+All seeds are controlled by environment variables. If you don't have `.env` file, create it in the root project folder.
+
+Below is the list of available seeds and configuration
+
+- `SEED_USERS_COUNT` - Set this variable to generate number of random users while starting application
+
 ## Contributing
 
 Feel free to contribute this project. 
