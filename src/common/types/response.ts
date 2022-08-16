@@ -23,19 +23,10 @@ export class Pagination {
     this.previousPage = model.previousPage;
   }
 
-  static ofTotalResults(options: {
-    totalResults: number;
-    page?: number;
-    resultsPerPage?: number;
-  }) {
+  static ofTotalResults(options: { totalResults: number; page?: number; resultsPerPage?: number }) {
     const resultsPerPage = options.resultsPerPage || options.totalResults || 1;
     const totalPages = Math.ceil(options.totalResults / resultsPerPage) || 1;
-    const currentPage =
-      options.page > totalPages
-        ? totalPages
-        : options.page < 1
-        ? 1
-        : options.page || 1;
+    const currentPage = options.page > totalPages ? totalPages : options.page < 1 ? 1 : options.page || 1;
 
     return new Pagination({
       totalResults: options.totalResults,
@@ -43,7 +34,7 @@ export class Pagination {
       currentPage: currentPage,
       resultsPerPage: resultsPerPage,
       nextPage: currentPage < totalPages ? currentPage + 1 : null,
-      previousPage: currentPage > 1 ? 1 : null,
+      previousPage: currentPage > 1 ? currentPage - 1 : null,
     });
   }
 
