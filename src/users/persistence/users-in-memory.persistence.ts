@@ -12,9 +12,29 @@ export class UsersInMemoryPersistence implements UsersPersistence {
   private readonly emails = new Set<string>();
 
   constructor(models?: UserPersistenceModel[]) {
-    models?.forEach((model) =>
-      this.users.set(model.id.toLowerCase(), UsersInMemoryPersistence.normalizeUserModel(model)),
-    );
+    models?.forEach((model) => {
+      this.users.set(model.id.toLowerCase(), UsersInMemoryPersistence.normalizeUserModel(model));
+      this.usernames.add(model.username);
+      this.emails.add(model.email);
+    });
+  }
+
+  private static createUserModel(model: UserPersistenceSaveModel): UserPersistenceModel {
+    return UsersInMemoryPersistence.normalizeUserModel({
+      ...model,
+      id: new UUID().toString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+
+  private static normalizeUserModel(model: UserPersistenceModel): UserPersistenceModel {
+    return {
+      ...model,
+      id: model.id.toLowerCase(),
+      email: model.email.toLowerCase().trim(),
+      username: model.username.toLowerCase().trim(),
+    };
   }
 
   async find(options?: FindOptions): Promise<FindResults<UserPersistenceModel[]>> {
@@ -60,23 +80,5 @@ export class UsersInMemoryPersistence implements UsersPersistence {
     this.users.delete(user.id);
     this.usernames.delete(user.username);
     this.emails.delete(user.email);
-  }
-
-  private static createUserModel(model: UserPersistenceSaveModel): UserPersistenceModel {
-    return UsersInMemoryPersistence.normalizeUserModel({
-      ...model,
-      id: new UUID().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  }
-
-  private static normalizeUserModel(model: UserPersistenceModel): UserPersistenceModel {
-    return {
-      ...model,
-      id: model.id.toLowerCase(),
-      email: model.email.toLowerCase().trim(),
-      username: model.username.toLowerCase().trim(),
-    };
   }
 }
