@@ -17,7 +17,10 @@ export class UsersController {
   @Get('/')
   @ApiResponse({ type: UsersListResponseModel })
   async getUsersList(@Query() query: FindUsersRequestModel) {
-    const findOptions = Pagination.calculateOffset(query);
+    const findOptions = {
+      search: query.search,
+      ...Pagination.calculateOffset(query),
+    };
     const results = await this.usersPersistence.find(findOptions);
     const pagination = Pagination.ofTotalResults({
       totalResults: results.total,

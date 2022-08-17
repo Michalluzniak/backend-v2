@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
@@ -14,4 +14,9 @@ export class FindUsersRequestModel {
   @Transform(({ value }) => (value ? +value : value))
   @ApiProperty({ format: 'int', required: false })
   resultsPerPage?: number;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ required: false })
+  search?: string;
 }

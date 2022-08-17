@@ -37,13 +37,26 @@ export class UsersInMemoryPersistence implements UsersPersistence {
     };
   }
 
+  private static _findUserFilter(search: string): (user: UserPersistenceModel) => boolean {
+    return (user: UserPersistenceModel) =>
+      user.username.includes(search) ||
+      user.email.includes(search) ||
+      user.firstName?.includes(search) ||
+      user.lastName?.includes(search) ||
+      `${user.firstName || ''} ${user.lastName || ''}`.trim().includes(search);
+  }
+
   async find(options?: FindOptions): Promise<FindResults<UserPersistenceModel[]>> {
+    const search = options?.search;
     const offset = options?.offset || 0;
     const limit = options?.limit ? offset + options?.limit || 0 : this.users.size;
+    const users = search
+      ? [...this.users.values()].filter(UsersInMemoryPersistence._findUserFilter(search))
+      : [...this.users.values()];
 
     return {
-      total: this.users.size,
-      rows: [...this.users.values()].slice(offset, limit),
+      total: users.length,
+      rows: users.slice(offset, limit),
     };
   }
 
