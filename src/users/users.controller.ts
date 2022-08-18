@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { IUserPersistence, UsersPersistence } from './users.persistence';
 import { CreateUserRequestModel } from './models/requests/create-user-request.model';
 import { Pagination } from '../common/types/response';
@@ -51,7 +51,7 @@ export class UsersController {
   @ApiResponse({ type: UserResponseModel })
   async updateUser(@Param() params: FindUserByIdRequestModel, @Body() model: UpdateUserRequestModel) {
     const user = await this.usersPersistence.findById(params.id);
-    const updatedUser = { ...model, ...user };
+    const updatedUser = { ...user, ...model };
     const results = await this.usersPersistence.save(updatedUser);
 
     return new UserResponseModel(results);
