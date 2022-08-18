@@ -3,10 +3,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserRequestModel {
   @IsString()
+  @IsOptional()
   @MinLength(8)
   @MaxLength(255)
   @ApiProperty({ minLength: 8, maxLength: 255, required: false })
-  password: string;
+  password?: string;
 
   @IsString()
   @IsOptional()
