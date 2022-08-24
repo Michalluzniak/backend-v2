@@ -1,6 +1,6 @@
 import * as JWT from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { Inject, InternalServerErrorException } from '@nestjs/common';
+import { Inject, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 
 export type Token = string;
 export type TokenClaims = any;
@@ -8,10 +8,8 @@ export type TokenClaims = any;
 export const ITokenService = Symbol('ITokenService');
 
 export class TokensService {
-  constructor(
-    @Inject(ConfigService)
-    private readonly configService: ConfigService,
-  ) {}
+  @Inject(ConfigService)
+  private readonly configService: ConfigService;
 
   generateAccessToken(claims: TokenClaims): { accessToken: Token; expiresAt: Date } {
     const privateKey = this.configService.get<JWT.Algorithm>('JWT_ACCESS_TOKEN_PRIVATE_KEY');
@@ -35,9 +33,12 @@ export class TokensService {
       throw new InternalServerErrorException('JWT_ACCESS_TOKEN_PUBLIC_KEY variable needs to be configured!');
     }
 
-    return JWT.verify(token, publicKey, {
-      complete: true,
-      algorithms: [this.configService.get<JWT.Algorithm>('JWT_ACCESS_TOKEN_ALGORITHM') || 'ES512'],
-    });
+    try {
+      return JWT.verify(token, publicKey, {
+        algorithms: [this.configService.get<JWT.Algorithm>('JWT_ACCESS_TOKEN_ALGORITHM') || 'ES512'],
+      }) as TokenClaims;
+    } catch (e) {
+      throw new UnauthorizedException('Wrong authorization credentials');
+    }
   }
 }

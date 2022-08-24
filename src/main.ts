@@ -11,6 +11,7 @@ async function bootstrap() {
     .setDescription(description)
     .setVersion(version)
     .addSecurity('basic', { type: 'http', scheme: 'basic' })
+    .addSecurity('bearer', { type: 'http', scheme: 'bearer' })
     .build();
 
   SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, config));
