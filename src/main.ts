@@ -6,7 +6,12 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  const config = new DocumentBuilder().setTitle(name).setDescription(description).setVersion(version).build();
+  const config = new DocumentBuilder()
+    .setTitle(name)
+    .setDescription(description)
+    .setVersion(version)
+    .addSecurity('basic', { type: 'http', scheme: 'basic' })
+    .build();
 
   SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, config));
 
