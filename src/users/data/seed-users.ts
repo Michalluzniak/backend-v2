@@ -12,7 +12,7 @@ export const seedUsers = (numberOfUsers = 0): UserPersistenceModel[] =>
     return {
       id: new UUID().toString(),
       email: `${username}@zaven.localhost`,
-      phoneNumber: faker.phone.number('+48 ### ### ###'),
+      phoneNumber: faker.phone.number('+485########'),
       password: faker.random.alpha({ count: 20, casing: 'mixed' }),
       birthday: faker.date.birthdate({ min: 1980, max: 2000, mode: 'year' }).toISOString().substring(0, 10),
       website: `https://zaven.co/team/${firstName.toLowerCase().substring(0, 1)}${lastName.toLowerCase()}`,
