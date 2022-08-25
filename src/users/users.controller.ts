@@ -6,12 +6,13 @@ import { FindUserByIdRequestModel } from './models/requests/find-user-by-id-requ
 import { UpdateUserRequestModel } from './models/requests/update-user-request.model';
 import { FindUsersRequestModel } from './models/requests/find-users-request.model';
 import { UsersListResponseModel } from './models/response/users-list-response.model';
-import { ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { UserResponseModel } from './models/response/user-response.model';
-import { AccessTokenGuard } from '../authorization/guards/access-token.guard';
+import { AccessTokenGuard } from '../tokens/guards/access-token.guard';
 
 @Controller('/users')
-@ApiSecurity('bearer')
+@ApiSecurity('Access Token')
+@ApiTags('Users')
 @UseGuards(AccessTokenGuard)
 export class UsersController {
   @Inject(IUserPersistence)

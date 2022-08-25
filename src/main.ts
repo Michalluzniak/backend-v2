@@ -10,8 +10,9 @@ async function bootstrap() {
     .setTitle(name)
     .setDescription(description)
     .setVersion(version)
-    .addSecurity('basic', { type: 'http', scheme: 'basic' })
-    .addSecurity('bearer', { type: 'http', scheme: 'bearer' })
+    .addSecurity('User Credentials', { type: 'http', scheme: 'basic' })
+    .addSecurity('Access Token', { type: 'http', scheme: 'bearer' })
+    .addSecurity('Refresh Token', { type: 'http', scheme: 'bearer' })
     .build();
 
   SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, config));

@@ -1,15 +1,14 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { ITokenService, TokensService } from '../../tokens/services/tokens.service';
+import { AccessTokensService } from '../services/access-tokens.service';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
-    @Inject(ITokenService)
-    private readonly tokenService: TokensService,
+    @Inject(AccessTokensService)
+    private readonly accessTokensService: AccessTokensService,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
     const [authorizationType, credentials] = authorizationHeader?.split(' ') || [];
@@ -22,6 +21,6 @@ export class AccessTokenGuard implements CanActivate {
       throw new UnauthorizedException('Missing authorization credentials');
     }
 
-    return !!this.tokenService.verifyAccessToken(credentials);
+    return this.accessTokensService.validateAccessToken(credentials);
   }
 }

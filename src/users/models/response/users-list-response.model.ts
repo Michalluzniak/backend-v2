@@ -1,14 +1,9 @@
-import {
-  Pagination,
-  SuccessResponsePaginated,
-} from '../../../common/types/response';
+import { Pagination, SuccessResponsePaginated } from '../../../common/types/response';
 import { UserModel } from './user.model';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserPersistenceModel } from '../../users.persistence';
 
-export class UsersListResponseModel extends SuccessResponsePaginated<
-  UserModel[]
-> {
+export class UsersListResponseModel extends SuccessResponsePaginated<UserModel[]> {
   @ApiProperty({ type: UserModel, isArray: true })
   readonly data: UserModel[];
 
