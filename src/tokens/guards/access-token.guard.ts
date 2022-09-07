@@ -19,8 +19,10 @@ export class AccessTokenGuard implements CanActivate {
       throw new UnauthorizedException('Wrong authorization type. Use bearer instead!');
     } else if (!credentials) {
       throw new UnauthorizedException('Missing authorization credentials');
+    } else if (!this.accessTokensService.validateAccessToken(credentials)) {
+      throw new UnauthorizedException('Invalid token');
     }
 
-    return this.accessTokensService.validateAccessToken(credentials);
+    return true;
   }
 }
