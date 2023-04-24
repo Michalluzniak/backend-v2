@@ -6,6 +6,9 @@
     "email": "kacper.obrzut@zaven.co",
     "name": "Kacper Obrzut"
   },
+  "engines": {
+    "node": "19.4.0"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
